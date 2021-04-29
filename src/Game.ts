@@ -1,17 +1,17 @@
 export class Game {
-    private _lastSymbol: string = ' ';
+    private _lastSymbol: Symbol = " ";
     private _board: Board = new Board();
 
-    public Play(symbol: string, x: number, y: number) : void {
-        if (this._lastSymbol == ' ') {
-            if (symbol == 'O') {
+    public Play(symbol: Symbol, x: number, y: number) : void {
+        if (this._lastSymbol == " ") {
+            if (symbol == "O") {
                 throw new Error("Invalid first player");
             }
         }
         else if (symbol == this._lastSymbol) {
             throw new Error("Invalid next player");
         }
-        else if (this._board.TileAt(x, y).Symbol != ' ') {
+        else if (this._board.TileAt(x, y).Symbol != " ") {
             throw new Error("Invalid position");
         }
 
@@ -19,7 +19,7 @@ export class Game {
         this._board.AddTileAt(symbol, x, y);
     }
 
-    public Winner() : string {
+    public Winner() : Symbol {
         if (this.isLineFullyPlayed(0)) {
             if (this._board.TileAt(0, 0)!.Symbol ==
                     this._board.TileAt(0, 1)!.Symbol &&
@@ -46,21 +46,23 @@ export class Game {
             }
         }
 
-        return ' ';
+        return " ";
     }
 
     private isLineFullyPlayed(lineNumber: number) {
-        return this._board.TileAt(lineNumber, 0)!.Symbol != ' ' &&
-          this._board.TileAt(lineNumber, 1)!.Symbol != ' ' &&
-          this._board.TileAt(lineNumber, 2)!.Symbol != ' ';
+        return this._board.TileAt(lineNumber, 0)!.Symbol != " " &&
+          this._board.TileAt(lineNumber, 1)!.Symbol != " " &&
+          this._board.TileAt(lineNumber, 2)!.Symbol != " ";
     }
 }
+
+type Symbol = "X" | "O" | " "
 
 interface Tile
 {
     X: number;
     Y: number;
-    Symbol: string;
+    Symbol: Symbol;
 }
 
 class Board
@@ -83,7 +85,7 @@ class Board
         return this._plays.find((t:Tile) => t.X == x && t.Y == y)!
     }
 
-    public AddTileAt(symbol: string, x: number, y: number) : void
+    public AddTileAt(symbol: Symbol, x: number, y: number) : void
     {
         const tile : Tile = {X :x, Y:y, Symbol:symbol};
 
