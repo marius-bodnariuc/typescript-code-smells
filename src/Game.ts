@@ -2,7 +2,7 @@ export class Game {
     private _lastSymbol: Symbol = " ";
     private _board: Board = new Board();
 
-    public Play(symbol: Symbol, x: number, y: number) : void {
+    public Play(symbol: Symbol, x: Index, y: Index) : void {
         if (this._lastSymbol == " ") {
             if (symbol == "O") {
                 throw new Error("Invalid first player");
@@ -20,7 +20,7 @@ export class Game {
     }
 
     public Winner() : Symbol {
-        if (this.isLineFullyPlayed(0)) {
+        if (this.isRowFullyPlayed(0)) {
             if (this._board.TileAt(0, 0)!.Symbol ==
                     this._board.TileAt(0, 1)!.Symbol &&
                     this._board.TileAt(0, 2)!.Symbol == this._board.TileAt(0, 1)!.Symbol) {
@@ -28,7 +28,7 @@ export class Game {
             }
         }
 
-        if (this.isLineFullyPlayed(1)) {
+        if (this.isRowFullyPlayed(1)) {
             if (this._board.TileAt(1, 0)!.Symbol ==
                     this._board.TileAt(1, 1)!.Symbol &&
                     this._board.TileAt(1, 2)!.Symbol ==
@@ -37,7 +37,7 @@ export class Game {
             }
         }
 
-        if (this.isLineFullyPlayed(2)) {
+        if (this.isRowFullyPlayed(2)) {
             if (this._board.TileAt(2, 0)!.Symbol ==
                     this._board.TileAt(2, 1)!.Symbol &&
                     this._board.TileAt(2, 2)!.Symbol ==
@@ -49,14 +49,15 @@ export class Game {
         return " ";
     }
 
-    private isLineFullyPlayed(lineNumber: number) {
-        return this._board.TileAt(lineNumber, 0)!.Symbol != " " &&
-          this._board.TileAt(lineNumber, 1)!.Symbol != " " &&
-          this._board.TileAt(lineNumber, 2)!.Symbol != " ";
+    private isRowFullyPlayed(row: Index) {
+        return this._board.TileAt(row, 0)!.Symbol != " " &&
+          this._board.TileAt(row, 1)!.Symbol != " " &&
+          this._board.TileAt(row, 2)!.Symbol != " ";
     }
 }
 
 type Symbol = "X" | "O" | " "
+type Index = 0 | 1 | 2
 
 interface Tile
 {
@@ -81,11 +82,11 @@ class Board
         }
     }
 
-    public TileAt(x:  number, y: number): Tile {
+    public TileAt(x:  Index, y: Index): Tile {
         return this._plays.find((t:Tile) => t.X == x && t.Y == y)!
     }
 
-    public AddTileAt(symbol: Symbol, x: number, y: number) : void
+    public AddTileAt(symbol: Symbol, x: Index, y: Index) : void
     {
         const tile : Tile = {X :x, Y:y, Symbol:symbol};
 
