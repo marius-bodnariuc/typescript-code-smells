@@ -11,7 +11,7 @@ export class Game {
         else if (symbol == this._lastSymbol) {
             throw new Error("Invalid next player");
         }
-        else if (this._board.TileAt(x, y).Symbol != " ") {
+        else if (this._board.SymbolAt(x, y) != " ") {
             throw new Error("Invalid position");
         }
 
@@ -20,39 +20,13 @@ export class Game {
     }
 
     public Winner() : Symbol {
-        if (this.isRowFullyPlayed(0)) {
-            if (this._board.TileAt(0, 0)!.Symbol ==
-                    this._board.TileAt(0, 1)!.Symbol &&
-                    this._board.TileAt(0, 2)!.Symbol == this._board.TileAt(0, 1)!.Symbol) {
-                return this._board.TileAt(0, 0)!.Symbol;
-            }
-        }
-
-        if (this.isRowFullyPlayed(1)) {
-            if (this._board.TileAt(1, 0)!.Symbol ==
-                    this._board.TileAt(1, 1)!.Symbol &&
-                    this._board.TileAt(1, 2)!.Symbol ==
-                            this._board.TileAt(1, 1)!.Symbol) {
-                return this._board.TileAt(1, 0)!.Symbol;
-            }
-        }
-
-        if (this.isRowFullyPlayed(2)) {
-            if (this._board.TileAt(2, 0)!.Symbol ==
-                    this._board.TileAt(2, 1)!.Symbol &&
-                    this._board.TileAt(2, 2)!.Symbol ==
-                            this._board.TileAt(2, 1)!.Symbol) {
-                return this._board.TileAt(2, 0)!.Symbol;
+        for (let row=0; row<3; row++) {
+            if (this._board.IsWinningRow(row as Index)) {
+                return this._board.SymbolAt(row as Index, 0);
             }
         }
 
         return " ";
-    }
-
-    private isRowFullyPlayed(row: Index) {
-        return this._board.TileAt(row, 0)!.Symbol != " " &&
-          this._board.TileAt(row, 1)!.Symbol != " " &&
-          this._board.TileAt(row, 2)!.Symbol != " ";
     }
 }
 
@@ -61,8 +35,8 @@ type Index = 0 | 1 | 2
 
 interface Tile
 {
-    X: number;
-    Y: number;
+    X: Index;
+    Y: Index;
     Symbol: Symbol;
 }
 
@@ -76,7 +50,7 @@ class Board
         {
             for (let j = 0; j < 3; j++)
             {
-                const tile : Tile = {X :i, Y:j, Symbol:" "};
+                const tile : Tile = {X: i as Index, Y: j as Index, Symbol:" "};
                 this._plays.push(tile);
             }
         }
@@ -86,11 +60,21 @@ class Board
         return this._plays.find((t:Tile) => t.X == x && t.Y == y)!
     }
 
+    public SymbolAt(x: Index, y: Index): Symbol {
+        return this.TileAt(x, y).Symbol;
+    }
+
     public AddTileAt(symbol: Symbol, x: Index, y: Index) : void
     {
         const tile : Tile = {X :x, Y:y, Symbol:symbol};
 
         this._plays.find((t:Tile) => t.X == x && t.Y == y)!.Symbol = symbol;
+    }
+
+    public IsWinningRow(row: Index) {
+        return this.SymbolAt(row, 0) != ' '
+          && this.SymbolAt(row, 0) == this.SymbolAt(row, 1)
+          && this.SymbolAt(row, 2) == this.SymbolAt(row, 1);
     }
 }
 
@@ -108,3 +92,4 @@ class Board
 // BUG - nothing restricts players to X and O - could potentially play A, B and everyone else
 // // e.g. use 'A', 'B', 'C' and so on in the test on line 30
 // should we use strict equals === ?
+// INCOMPLETE FUNCTIONALITY - only checking for rows for victory

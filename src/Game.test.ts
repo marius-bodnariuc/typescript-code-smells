@@ -101,4 +101,17 @@ describe('TicTacToe game', () => {
         
         expect(winner).toBe("O");
     });
+
+    it('PENDING - should declare player O as winner if it plays three in first column', () => {
+        game.Play('X', 1, 2);
+        game.Play('O', 2, 0);
+        game.Play('X', 1, 1);
+        game.Play('O', 1, 0);
+        game.Play('X', 2, 1);
+        game.Play('O', 0, 0);
+
+        var winner = game.Winner();
+
+        expect(winner).toBe(" ");
+    });
 });
