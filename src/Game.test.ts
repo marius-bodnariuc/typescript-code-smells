@@ -1,4 +1,3 @@
-
 import { Game } from "./Game"
 
 describe('TicTacToe game', () => {
