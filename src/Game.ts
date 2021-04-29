@@ -106,3 +106,4 @@ class Board
 
 // BUG - nothing restricts players to X and O - could potentially play A, B and everyone else
 // // e.g. use 'A', 'B', 'C' and so on in the test on line 30
+// should we use strict equals === ?
